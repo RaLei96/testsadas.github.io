@@ -11,7 +11,7 @@
 With the rise of diffusion models, audio-video generation has been revolutionized. However, most existing methods rely on separate modules for each modality, with limited exploration of unified generative architectures. In addition, many are confined to a single task and small-scale datasets. To address these limitations, we first propose UniForm, a unified multi-task diffusion transformer that jointly generates audio and visual modalities in a shared latent space. A single diffusion process models both audio and video, capturing the inherent correlations between sound and vision. Second, we introduce task-specific noise schemes and task tokens, enabling a single model to support multiple tasks, including text-to-audio-video, audio-to-video, and video-to-audio generation. Furthermore, by leveraging large language models and a large-scale text-audio-video combined dataset, UniForm achieves greater generative diversity than prior approaches. Extensive experiments show that UniForm achieves the state-of-the-art performance across audio-video generation tasks, producing content that is both well-aligned and close to real-world data distributions.
 
 ## Demos
-We present generation results from our proposed **UniForm** across multiple audio-video synthesis conditions. Each set demonstrates three key capabilities under identical labels or captions: text-to-audible video (T2AV), audio-to-video (A2V), and video-to-audio (V2A).
+We present generation results from our proposed **UniForm** across multiple audio-video synthesis conditions. Each set demonstrates three key capabilities under identical labels or captions: text-to-audio-video (T2AV), audio-to-video (A2V), and video-to-audio (V2A).
 
 
 ## Landscape
