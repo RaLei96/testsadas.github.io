@@ -5,10 +5,10 @@
 </style>
 
 
-# UniForm: A Unified Diffusion Transformer for Audio-Video Generation
+# UniForm: A Unified Multi-Task Diffusion Transformer for Audio-Video Generation
 
 ## Abstract
-As a natural multimodal content, audible video delivers an immersive sensory experience. Consequently, audio-video generation systems have substantial potential. However, existing diffusion-based studies mainly employ relatively independent modules for generating each modality, which lack exploration of shared-weight generative modules. This approach may under-use the intrinsic correlations between audio and visual modalities, potentially resulting in sub-optimal generation quality. To address this, we propose UniForm, a unified diffusion transformer designed to enhance cross-modal consistency. By concatenating auditory and visual information, UniForm learns to generate audio and video simultaneously within a unified latent space, facilitating the creation of high-quality and well-aligned audio-visual pairs. Extensive experiments demonstrate the superior performance of our method in joint audio-video generation, audio-guided video generation, and video-guided audio generation tasks.
+With the rise of diffusion models, audio-video generation has been revolutionized. However, most existing methods rely on separate modules for each modality, with limited exploration of unified generative architectures. In addition, many are confined to a single task and small-scale datasets. To address these limitations, we first propose UniForm, a unified multi-task diffusion transformer that jointly generates audio and visual modalities in a shared latent space. A single diffusion process models both audio and video, capturing the inherent correlations between sound and vision. Second, we introduce task-specific noise schemes and task tokens, enabling a single model to support multiple tasks, including text-to-audio-video, audio-to-video, and video-to-audio generation. Furthermore, by leveraging large language models and a large-scale text-audio-video combined dataset, UniForm achieves greater generative diversity than prior approaches. Extensive experiments show that UniForm achieves the state-of-the-art performance across audio-video generation tasks, producing content that is both well-aligned and close to real-world data distributions.
 
 ## Demos
 We present generation results from our proposed **UniForm** across multiple audio-video synthesis conditions. Each set demonstrates three key capabilities under identical labels or captions: text-to-audible video (T2AV), audio-to-video (A2V), and video-to-audio (V2A).
@@ -403,34 +403,6 @@ The image captures a serene moment in nature, featuring a small bird perched on 
   </div>
 </div>
 
-
-
-The video shows a man sitting in a room, deeply engrossed in playing a guitar. He is wearing a black jacket and has a serious expression on his face. The guitar he is playing has a wooden body and a black pickguard. The room has a wooden wall and a door, and the man is seated on a chair. The lighting in the room is dim, creating a cozy atmosphere. The man's fingers are moving over the strings of the guitar, indicating that he is playing a song. The overall scene suggests a quiet, intimate moment of music-making.
-<div style="display: flex; flex-wrap: wrap; justify-content: space-around; margin-bottom: 30px;">
-  <div style="margin: 10px;">
-    <h3 style="font-size: 18px;">T2AV</h3>
-    <video width="256" height="256" controls>
-      <source src="vgg\lPXTBXa0tE_000030_t2av.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-  </div>
-  
-  <div style="margin: 10px;">
-    <h3 style="font-size: 18px;">A2V</h3>
-    <video width="256" height="256" controls>
-      <source src="vgg\lPXTBXa0tE_000030_ta2v.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-  </div>
-
-  <div style="margin: 10px;">
-    <h3 style="font-size: 18px;">V2A</h3>
-    <video width="256" height="256" controls>
-      <source src="vgg\lPXTBXa0tE_000030_tv2a.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-  </div>
-</div>
 
 The image is a screenshot from a video game, depicting a female character riding a horse in a virtual environment. The character is wearing a pink shirt and a purple helmet, and she is holding a riding crop in her right hand. The horse is white with a black mane and tail. The rider is in motion, as indicated by the blurred background and the motion-blur effect on the horse's legs.  The environment is a fenced-in area with trees and a clear sky. There are several poles and flags visible, suggesting a course or obstacle for the rider to navigate. The style of the image is reminiscent of early 3D graphics, with a limited color palette and a pixelated quality. The overall impression is that of a retro or early 2000s video game.
 <div style="display: flex; flex-wrap: wrap; justify-content: space-around; margin-bottom: 30px;">
