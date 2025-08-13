@@ -1,115 +1,847 @@
-<style>
-  h3 {
-    text-align: center;
-  }
-</style>
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Self Forcing</title>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const toggleButton = document.getElementById('toggleButton');
+      const tocContent = document.getElementById('tocContent');
+      const tocHeader = document.querySelector('.toc-header');
+
+      function toggleMenu() {
+        tocContent.classList.toggle('collapsed');
+        toggleButton.textContent = tocContent.classList.contains('collapsed') ? '▶' : '▼';
+      }
+
+      tocHeader.addEventListener('click', toggleMenu);
+    });
+
+  </script>
 
 
-# UniForm: A Unified Multi-Task Diffusion Transformer for Audio-Video Generation
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans&family=Noto+Sans&display=swap" rel="stylesheet">
 
-## Abstract
-With the rise of diffusion models, audio-video generation has been revolutionized. However, most existing methods rely on separate modules for each modality, with limited exploration of unified generative architectures. In addition, many are confined to a single task and small-scale datasets. To address these limitations, we first propose UniForm, a unified multi-task diffusion transformer that jointly generates audio and visual modalities in a shared latent space. A single diffusion process models both audio and video, capturing the inherent correlations between sound and vision. Second, we introduce task-specific noise schemes and task tokens, enabling a single model to support multiple tasks, including text-to-audio-video, audio-to-video, and video-to-audio generation. Furthermore, by leveraging large language models and a large-scale text-audio-video combined dataset, UniForm achieves greater generative diversity than prior approaches. Extensive experiments show that UniForm achieves the state-of-the-art performance across audio-video generation tasks, producing content that is both well-aligned and close to real-world data distributions.
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="preload" href="./static/css/index.css" as="style">
+  <link rel="stylesheet" href="./static/css/index.css">
 
-## Demos
-We present generation results from our proposed **UniForm** across multiple audio-video synthesis conditions. Each set demonstrates three key capabilities under identical labels or captions: text-to-audio-video (T2AV), audio-to-video (A2V), and video-to-audio (V2A).
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script defer src="./static/js/bulma-carousel.min.js"></script>
+  <script defer src="./static/js/bulma-slider.min.js"></script>
+  <script defer src="./static/js/index.js"></script>
+
+  <style>
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      width: 100%;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+
+    .video-item {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+    }
+
+    .video-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .video-item video {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .prompt-text {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 1rem;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: #fff;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.6), transparent);
+      opacity: 0;
+      transform: translateY(100%);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .video-item:hover .prompt-text {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 1024px) {
+      .video-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .video-grid {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+        padding: 0.5rem;
+      }
+    }
+  </style>
 
 
-## Landscape
+</head>
 
-### splashing water
-<div style="display: flex; flex-wrap: nowrap; justify-content: flex-start; gap: 20px; width: 1100px;">
-  <div style="margin: 10px;">
-    <h3 style="font-size: 18px;">T2AV</h3>
-    <video width="256" height="256" controls>
-      <source src="landscape\bUntI90An-U_clip_1_17fps_t2av.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
+<body>
+
+
+<!--   <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <br>
+
+            <h1 class="title is-1 publication-title">Self Forcing: Bridging Training and Inference in Autoregressive Video Diffusion <br> </h1>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section> -->
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <br>
+            <h1 class="title is-1 publication-title" style="margin-bottom:0rem">Self Forcing</h1>
+            <h2 class="title is-3 publication-title">Bridging the Train-Test Gap in Autoregressive Video Diffusion</h2>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a href="https://www.xunhuang.me/">Xun Huang</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://zhengqili.github.io/">Zhengqi Li</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://guandehe.github.io/">Guande He</a><sup>2</sup>,
+              </span>
+              <!-- <br> -->
+              <span class="author-block">
+                <a href="https://mingyuanzhou.github.io/">Mingyuan Zhou</a><sup>2</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://research.adobe.com/person/eli-shechtman/">Eli Shechtman</a><sup>1</sup>,
+              </span>
+            </div>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block"><sup>1</sup>Adobe Research,</span>
+              <span class="author-block"><sup>2</sup>UT Austin,</span>
+              <!-- <span class="author-block"><sup>*</sup>Equal Contribution</span> -->
+            </div>
+
+            <!-- <div class="is-size-5 column has-text-centered"> -->
+              <!-- <strong>CVPR 2025</strong> -->
+            <!-- </div> -->
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/2506.08009" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                    </span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+                <span class="link-block">
+                  <a href="https://github.com/guandeh17/Self-Forcing"
+                     class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                        <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                    </a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-body" style="padding-bottom: 0rem;">
+        <div class="container is-max-desktop">
+          <div class="columns is-centered">
+            <div class="column has-text-centered">
+              <div class="content has-text-justified">
+                <video controls preload="metadata" autoplay muted loop playsinline style="width: 100%; height: auto; border-radius: 8px;">
+                  <source src="static/videos/demo.mp4" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-body" style="padding-bottom: 0rem;">
+        <div class="container is-max-desktop">
+          <div class="columns is-centered">
+            <div class="column has-text-centered">
+              <h2 class="title is-4" style="color: #3273dc; margin-bottom: 1rem;">TL;DR</h2>
+              <div class="content has-text-justified" style="font-size: 1.25rem; line-height: 1.6; background-color: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #3273dc;">
+                <p>
+                  <strong>Self Forcing</strong> trains autoregressive video diffusion models by <strong>simulating the inference process during training</strong>, performing autoregressive rollout with KV caching.
+                    It resolves the train-test distribution mismatch and enables <strong>real-time, streaming video generation on a single RTX 4090</strong>  while matching the quality of state-of-the-art diffusion models.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="container " id="overview">
+    <!-- <h2 id="obj-comparison" class="title is-3 has-text-centered">Training paradigms for AR video diffusion models</h2> -->
+    <div class="content has-text-justified" style="font-size: 1.5rem; line-height: 2.0;">
+      <figure class="image is-centered">
+        <img src="static/teaser.jpg">
+    </div>
   </div>
-  
-  <div style="margin: 10px;">
-    <h3 style="font-size: 18px;">A2V</h3>
-    <video width="256" height="256" controls>
-      <source src="landscape\bUntI90An-U_clip_1_17fps_ta2v.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
+
+  <!-- <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              We introduce Self Forcing, a novel training paradigm for autoregressive video diffusion models. It addresses the longstanding issue of exposure bias, where models trained on ground-truth context must generate sequences conditioned on their own imperfect outputs during inference. Unlike prior methods that denoise future frames based on ground-truth context frames, Self Forcing conditions each frame's generation on previously self-generated outputs by performing autoregressive rollout with key-value(KV) caching during training. This strategy enables supervision through a holistic loss at the video level that directly evaluates the quality of the entire generated sequence, rather than relying solely on traditional frame-wise objectives. To ensure training efficiency, we employ a few-step diffusion model along with a stochastic gradient truncation strategy, effectively balancing computational cost and performance. We further introduce a rolling KV cache mechanism that enables efficient autoregressive video extrapolation. Extensive experiments demonstrate that our approach achieves real-time streaming video generation with sub-second latency on a single GPU, while matching or even surpassing the generation quality of significantly slower and non-causal diffusion models.
+            </p>
+          </div>
+        </div>
+      </div>
+      </div><br>
+      <!--/ Abstract. -->
+  <!-- </section> --> -->
+
+  <br>
+
+
+  <hr>
+  <div class="container " id="text2short">
+    <h2 id="obj-comparison" class="title is-3 has-text-centered">Real-Time Video Generation</h2>
+    <div class="content has-text-justified" style="font-size: 1.5rem; line-height: 1.8;">
+      <p>
+        Our model generates high-quality 480P videos with an initial latency of <strong>~0.8 seconds</strong>, after which
+        frames are generated in a streaming fashion at <strong>~16 FPS</strong> on a single H100 GPU and ~10 FPS on a single 4090 with some optimizations.
+        <br>
+        Below, we show 5-second videos (top) and extrapolated 10-second videos (bottom) generated by our model. <a href="videos.html">[More Examples]</a>
+      </p>
+    </div>
   </div>
 
-  <div style="margin: 10px;">
-    <h3 style="font-size: 18px;">V2A</h3>
-    <video width="256" height="256" controls>
-      <source src="landscape\bUntI90An-U_clip_1_17fps_tv2a.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
+  <br>
+
+
+  <div class="video-grid">
+
+    <div class="video-item">
+      <video controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="examples/movie-gen-5s/A close-up shot of a ceramic teacup slowly pouring water into a gla.mp4"
+          type="video/mp4">
+      </video>
+      <p class="prompt-text">A close-up shot of a ceramic teacup slowly pouring water into a glass mug. The water flows smoothly from the spout of the teacup into the mug, creating gentle ripples as it fills up. Both cups have detailed textures, with the teacup having a matte finish and the glass mug showcasing clear transparency. The background is a blurred kitchen countertop, adding context without distracting from the central action. The pouring motion is fluid and natural, emphasizing the interaction between the two cups.</p>
+    </div>
+
+    <div class="video-item">
+      <video controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="examples/movie-gen-5s/A dynamic and chaotic scene in a dense forest during a heavy rainstorm, capturing a real girl franti-0.mp4"
+          type="video/mp4">
+      </video>
+      <p class="prompt-text">A dynamic and chaotic scene in a dense forest during a heavy rainstorm, capturing a real girl frantically running through the foliage. Her wild hair flows behind her as she sprints, her arms flailing and her face contorted in fear and desperation. Behind her, various animals—rabbits, deer, and birds—are also running, creating a frenzied atmosphere. The girl's clothes are soaked, clinging to her body, and she is screaming and shouting as she tries to escape. The background is a blur of greenery and rain-drenched trees, with occasional glimpses of the darkening sky. A wide-angle shot from a low angle, emphasizing the urgency and chaos of the moment.</p>
+    </div>
+
+    <div class="video-item">
+      <video controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="examples/movie-gen-5s/A dynamic over-the-shoulder perspective of a chef meticulously plating a dish in a bustling kitchen.-0.mp4"
+          type="video/mp4">
+      </video>
+      <p class="prompt-text">A dynamic over-the-shoulder perspective of a chef meticulously plating a dish in a bustling kitchen. The chef, a middle-aged man with a neatly trimmed beard and focused expression, deftly arranges ingredients on a pristine white plate. His hands move with precision, each gesture deliberate and practiced. The background shows a crowded kitchen with steaming pots, whirring blenders, and the clatter of utensils. Bright lights highlight the scene, casting shadows across the busy workspace. The camera angle captures the chef's detailed work from behind, emphasizing his skill and dedication.</p>
+    </div>
+
+    <div class="video-item">
+      <video controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="examples/vbench/A single white sheep bending down to drink water from a calm river. The sheep has fluffy wool, long -0.mp4"
+          type="video/mp4">
+      </video>
+      <p class="prompt-text">A single white sheep bending down to drink water from a calm river. The sheep has fluffy wool, long curved horns, and soft brown eyes. It is positioned near the riverbank, with its front legs partially submerged in the clear water. The river flows gently, reflecting the surrounding greenery and blue sky. The background shows lush grass and trees along the riverbank, creating a serene pastoral landscape. The sheep's body is slightly tilted as it bends down to drink, emphasizing a natural and tranquil motion. Medium close-up shot focusing on the sheep and the river.</p>
+    </div>
+
+    <div class="video-item">
+      <video controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="examples/vbench/A playful raccoon is seen playing an electronic guitar, strumming the strings with its front paws. T-3.mp4"
+          type="video/mp4">
+      </video>
+      <p class="prompt-text">A playful raccoon is seen playing an electronic guitar, strumming the strings with its front paws. The raccoon has distinctive black facial markings and a bushy tail. It sits comfortably on a small stool, its body slightly tilted as it focuses intently on the instrument. The setting is a cozy, dimly lit room with vintage posters on the walls, adding a retro vibe. The raccoon's expressive eyes convey a sense of joy and concentration. Medium close-up shot, focusing on the raccoon's face and hands interacting with the guitar.</p>
+    </div>
+
+    <div class="video-item">
+      <video controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="examples/movie-gen-10s/A dramatic and dynamic scene in the style of a disaster movie, depicting a powerful tsunami rushing -0.mp4"
+          type="video/mp4">
+      </video>
+      <p class="prompt-text">A dramatic and dynamic scene in the style of a disaster movie, depicting a powerful tsunami rushing through a narrow alley in Bulgaria. The water is turbulent and chaotic, with waves crashing violently against the walls and buildings on either side. The alley is lined with old, weathered houses, their facades partially submerged and splintered. The camera angle is low, capturing the full force of the tsunami as it surges forward, creating a sense of urgency and danger. People can be seen running frantically, adding to the chaos. The background features a distant horizon, hinting at the larger scale of the tsunami. A dynamic, sweeping shot from a low-angle perspective, emphasizing the movement and intensity of the event.</p>
+    </div>
+
   </div>
-</div>
+  <!--
+  <div id="results-carousel" class="carousel results-carousel">
+    <div class="item">
+      <video id="cereal" controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="https://huggingface.co/datasets/tianweiy/causvid_website/resolve/main/videos/5s_t2v_decoded/video_0009.mp4"
+          type="video/mp4">
+      </video>
+      <p class="prompt-text">close up shot of a woman, police lights flashing in background, cinematic, low contrast
+      </p>
+    </div>
 
-  <div style="margin: 10px;">
-    <h3 style="font-size: 18px;">V2A</h3>
-    <video width="256" height="256" controls>
-      <source src="landscape\bUntI90An-U_clip_1_17fps_tv2a.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
+    <div class="item">
+      <video id="cereal" controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="https://huggingface.co/datasets/tianweiy/causvid_website/resolve/main/videos/5s_t2v_decoded/video_0010.mp4"
+          type="video/mp4">
+      </video>
+      <p class="prompt-text">in a beautifully rendered papercraft world, a steamboat travels across a vast ocean
+        with wispy clouds in the sky. vast grassy hills lie in the distant background, and some sealife is visible
+        near the papercraft ocean's surface</p>
+    </div>
+
+    <div class="item">
+      <video id="cereal" controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="https://huggingface.co/datasets/tianweiy/causvid_website/resolve/main/videos/5s_t2v_decoded/video_0011.mp4"
+          type="video/mp4">
+      </video>
+      <p class="prompt-text">Macro shot of a man wearing an antique diving helmet with dark glass and a jetpack
+        walking on the veins of a leaf. Realistic style</p>
+    </div>
+
+    <div class="item">
+      <video id="cereal" controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="https://huggingface.co/datasets/tianweiy/causvid_website/resolve/main/videos/5s_t2v_decoded/video_0012.mp4"
+          type="video/mp4">
+      </video>
+      <p class="prompt-text">A Samoyed and a Golden Retriever dog are playfully romping through a futuristic neon
+        city at night. The neon lights emitted from the nearby buildings glistens off of their fur.</p>
+    </div>
+
+    <div class="item">
+      <video id="cereal" controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="https://huggingface.co/datasets/tianweiy/causvid_website/resolve/main/videos/5s_t2v_decoded/video_0013.mp4"
+          type="video/mp4">
+      </video>
+      <p class="prompt-text">Carefully pouring the milk into the cup, the milk flowed smoothly and the cup was
+        gradually filled with a milky white color</p>
+    </div>
+
+  </div> -->
+
+  <hr>
+  <div class="container " id="overview">
+    <h2 id="obj-comparison" class="title is-3 has-text-centered">(Surprisingly) Efficient Training, Even Without Full Parallelism</h2>
+    <div class="content has-text-justified" style="font-size: 1.5rem; line-height: 1.8;">
+      <p>
+        While Self Forcing relies on sequential rollout, it is surprisingly efficient and obtains better quality with the same training budget. This is mainly because we still maintain sufficient parallelism even processing one frame at a time.
+      </p>
+    </div>
+
+    <div class="content has-text-justified" style="font-size: 1.5rem; line-height: 2.0;">
+      <figure class="image is-centered">
+        <img src="static/results.png">
+      </figure>
+    </div>
   </div>
-</div>
+  <br>
 
-### squishing water
-<div style="display: flex; flex-wrap: wrap; justify-content: space-around; margin-bottom: 30px;">
-  <div style="margin: 10px;">
-    <h3 style="font-size: 18px;">T2AV</h3>
-    <video width="256" height="256" controls>
-      <source src="landscape\KljCauisAFc_clip_1_17fps_t2av.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-  </div>
-  
-  <div style="margin: 10px;">
-    <h3 style="font-size: 18px;">A2V</h3>
-    <video width="256" height="256" controls>
-      <source src="landscape\KljCauisAFc_clip_1_17fps_ta2v.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
+  <hr>
+
+
+  <div class="container ">
+    <h2 id="obj-comparison" class="title is-3 has-text-centered">Faster, and Better </h2>
+    <div class="content has-text-justified" style="font-size: 1.5rem; line-height: 1.8;">
+      <p>
+        Our method has the same speed as CausVid but has much better video quality, free from over-saturation artifacts and having more natural motion.  Compared to Wan, SkyReels, and MAGI, our approach is <strong>150–400×</strong> faster in terms of latency, while achieving comparable or superior visual quality.
+      </p>
+    </div>
   </div>
 
-  <div style="margin: 10px;">
-    <h3 style="font-size: 18px;">V2A</h3>
-    <video width="256" height="256" controls>
-      <source src="landscape\KljCauisAFc_clip_1_17fps_tv2a.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-  </div>
-</div>
-
-### fire crackling
-<div style="display: flex; flex-wrap: wrap; justify-content: space-around; margin-bottom: 30px;">
-  <div style="margin: 10px;">
-    <h3 style="font-size: 18px;">T2AV</h3>
-    <video width="256" height="256" controls>
-      <source src="landscape\O5zASuld4k_clip_1_17fps_t2av.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-  </div>
-  
-  <div style="margin: 10px;">
-    <h3 style="font-size: 18px;">A2V</h3>
-    <video width="256" height="256" controls>
-      <source src="landscape\O5zASuld4k_clip_1_17fps_ta2v.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
+  <br>
+  <div class="columns is-centered has-text-centered">
+    <div class="column">
+      <p><strong style="font-size: 24px;">Wan2.1-1.3B</strong></p>
+    </div>
+    <div class="column">
+      <p><strong style="font-size: 24px;">SkyReels2-1.3B</strong></p>
+    </div>
+    <div class="column">
+      <p><strong style="font-size: 24px;">MAGI-1-4.5B</strong></p>
+    </div>
+    <div class="column">
+      <p><strong style="font-size: 24px;">CausVid-1.3B</strong></p>
+    </div>
+    <div class="column">
+      <p><strong style="font-size: 24px;">Ours-1.3B</strong></p>
+    </div>
   </div>
 
-  <div style="margin: 10px;">
-    <h3 style="font-size: 18px;">V2A</h3>
-    <video width="256" height="256" controls>
-      <source src="landscape\O5zASuld4k_clip_1_17fps_v2a.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
+  <div id="results-carousel"
+    style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
+    <div class="item" style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+      <video controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="static/videos/wan/0000.mp4"
+          type="video/mp4">
+      </video>
+    </div>
+    <div class="item" style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+      <video controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="static/videos/skyreels2/0000.mp4"
+          type="video/mp4">
+      </video>
+    </div>
+    <div class="item" style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+      <video controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="static/videos/magi1/0000.mp4"
+          type="video/mp4">
+      </video>
+    </div>
+    <div class="item" style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+      <video controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="static/videos/causvid/0000.mp4"
+          type="video/mp4">
+      </video>
+    </div>
+    <div class="item" style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+      <video controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="static/videos/self_forcing_dmd/0000.mp4"
+          type="video/mp4">
+      </video>
+    </div>
   </div>
-</div>
+  <p class="prompt-text">A stylish woman walks down a Tokyo street filled with warm glowing neon and animated city signage. She wears a black leather jacket, a long red dress, and black boots, and carries a black purse. She wears sunglasses and red lipstick. She walks confidently and casually. The street is damp and reflective, creating a mirror effect of the colorful lights. Many pedestrians walk about.</p>
+  <!-- Row 2 -->
 
- -->
+  <div id="results-carousel"
+  style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
+    <div class="item" style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+      <video controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="static/videos/wan/0014.mp4"
+          type="video/mp4">
+      </video>
+    </div>
+    <div class="item" style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+      <video controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="static/videos/skyreels2/0014.mp4"
+          type="video/mp4">
+      </video>
+    </div>
+    <div class="item" style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+      <video controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="static/videos/magi1/0014.mp4"
+          type="video/mp4">
+      </video>
+    </div>
+    <div class="item" style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+      <video controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="static/videos/causvid/0014.mp4"
+          type="video/mp4">
+      </video>
+    </div>
+    <div class="item" style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+      <video controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="static/videos/self_forcing_dmd/0014.mp4"
+          type="video/mp4">
+      </video>
+    </div>
+  </div>
+  <p class="prompt-text">A petri dish with a bamboo forest growing within it that has tiny red pandas running around.</p>
+  <div id="results-carousel"
+    style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
+    <div class="item" style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+      <video controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="static/videos/wan/0040.mp4"
+          type="video/mp4">
+      </video>
+    </div>
+    <div class="item" style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+      <video controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="static/videos/skyreels2/0040.mp4"
+          type="video/mp4">
+      </video>
+    </div>
+    <div class="item" style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+      <video controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="static/videos/magi1/0040.mp4"
+          type="video/mp4">
+      </video>
+    </div>
+    <div class="item" style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+      <video controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="static/videos/causvid/0040.mp4"
+          type="video/mp4">
+      </video>
+    </div>
+    <div class="item" style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+      <video controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="static/videos/self_forcing_dmd/0040.mp4"
+          type="video/mp4">
+      </video>
+    </div>
+  </div>
+  <p class="prompt-text">An adorable happy otter confidently stands on a surfboard wearing a yellow lifejacket, riding along turquoise tropical waters near lush tropical islands, 3D digital render art style.</p>
+  <br>
+  <hr>
+<!--   <div class="container ">
+    <h2 id="obj-comparison" class="title is-3 has-text-centered">Code/Uncrated Samples</h2>
+    <div class="content has-text-justified" style="font-size: 1.5rem; line-height: 1.8;">
+      <p>
+        In the local folder <a href="./uncurated_samples">uncurated_samples</a>, we attach uncurated samples from our method generated from the first 64 prompts in the MovieGenBench dataset with a fixed random seed (seed = 0). We provide source code for our method in the <a href="./code">code</a> folder.
+      </p>
+    </div>
+  </div> -->
+  <!-- <br> -->
+  <!-- <hr> -->
+  <div class="container ">
+    <h2 id="obj-comparison" class="title is-3 has-text-centered">Works with various distribution matching objectives, supports frame-wise AR generation</h2>
+    <div class="content has-text-justified" style="font-size: 1.5rem; line-height: 1.8;">
+      <!-- <p>
+        We observe that chunk-wise Self Forcing with DMD, SiD, and GAN objectives yields qualitatively similar results, while frame-wise Self Forcing with the GAN loss performs slightly worse than with DMD or SiD, possibly due to the inherent challenges of training GANs.
+      </p> -->
+    </div>
+  </div>
+  <br>
+  <div class="columns is-centered has-text-centered">
+    <div class="column">
+      <p><strong style="font-size: 24px;">Chunk-wise, SiD</strong></p>
+    </div>
+    <div class="column">
+      <p><strong style="font-size: 24px;">Chunk-wise, GAN</strong></p>
+    </div>
+    <div class="column">
+      <p><strong style="font-size: 24px;">Chunk-wise, DMD</strong></p>
+    </div>
+  </div>
+  <div id="results-carousel"
+    style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
+    <div class="item" style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+      <video id="cereal" controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="static/videos/self_forcing_sid/block3_2.mp4"
+          type="video/mp4">
+      </video>
+    </div>
+    <div class="item" style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+      <video id="cereal" controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="static/videos/self_forcing_gan/block3_2.mp4"
+          type="video/mp4">
+      </video>
+    </div>
+    <div class="item" style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+      <video id="cereal" controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="static/videos/self_forcing_dmd/0004.mp4"
+          type="video/mp4">
+      </video>
+    </div>
+  </div>
+  <p class="prompt-text">Animated scene features a close-up of a short fluffy monster kneeling beside a melting red candle. </p>
+  <br>
+  <div class="columns is-centered has-text-centered">
+    <div class="column">
+      <p><strong style="font-size: 24px;">Frame-wise, SiD</strong></p>
+    </div>
+    <div class="column">
+      <p><strong style="font-size: 24px;">Frame-wise, GAN</strong></p>
+    </div>
+    <div class="column">
+      <p><strong style="font-size: 24px;">Frame-wise, DMD</strong></p>
+    </div>
+  </div>
+  <div id="results-carousel"
+    style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
+    <div class="item" style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+      <video id="cereal" controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="static/videos/self_forcing_sid/block1.mp4"
+          type="video/mp4">
+      </video>
+    </div>
+    <div class="item" style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+      <video id="cereal" controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="static/videos/self_forcing_gan/block1.mp4"
+          type="video/mp4">
+      </video>
+    </div>
+    <div class="item" style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+      <video id="cereal" controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="static/videos/self_forcing_dmd/block1.mp4"
+          type="video/mp4">
+      </video>
+    </div>
+  </div>
+  <p class="prompt-text">A close up view of a glass sphere that has a zen garden within it. There is a small dwarf in the sphere who is raking the zen garden and creating patterns in the sand.</p>
 
-## AudioSet
+  <!-- <br>
+  <hr>
+  <div class="container ">
+    <h2 id="obj-comparison" class="title is-3 has-text-centered">Rolling KV Cache Extrapolation: Comparing With and Without Local Attention Training</h2>
+    <div class="content has-text-justified" style="font-size: 1.5rem; line-height: 1.8;">
+      <p>
+        We show that naively performing rolling KV cache to generate long videos leads to flickering artifacts, which can be addressed by performing local attention training.
+      </p>
+    </div>
+  </div>
+  <br>
+  <div class="columns is-centered has-text-centered">
+    <div class="column">
+      <p><strong style="font-size: 24px;">Without Local Attention Training</strong></p>
+    </div>
+    <div class="column">
+      <p><strong style="font-size: 24px;">With Local Attention Training</strong></p>
+    </div>
+    <div class="column">
+      <p><strong style="font-size: 24px;">Without Local Attention Training</strong></p>
+    </div>
+    <div class="column">
+      <p><strong style="font-size: 24px;">With Local Attention Training</strong></p>
+    </div>
+  </div>
+  <div id="results-carousel"
+    style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
+    <div class="item" style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+      <video id="cereal" controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="static/videos/local-21-rolling_10s/0.mp4"
+          type="video/mp4">
+      </video>
+    </div>
+    <div class="item" style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+      <video id="cereal" controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="static/videos/local-18-rolling_10s/0.mp4"
+          type="video/mp4">
+      </video>
+    </div>
+    <div class="item" style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+      <video id="cereal" controls preload="metadata" autoplay muted loop playsinline>
+          <source
+            src="static/videos/local-21-rolling_10s/3.mp4"
+          type="video/mp4">
+      </video>
+    </div>
+    <div class="item" style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+      <video id="cereal" controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="static/videos/local-18-rolling_10s/3.mp4"
+          type="video/mp4">
+      </video>
+    </div>
+  </div> -->
+
+  <br>
+  <hr>
+  <div class="container ">
+    <h2 id="obj-comparison" class="title is-3 has-text-centered">Limitation: Extrapolation Quality</h2>
+    <div class="content has-text-justified" style="font-size: 1.5rem; line-height: 1.8;">
+      <p>
+        While Self Forcing addresses exposure bias and we observe no error accumulation within the video length the model is trained on (5 seocnds), we still observe quality degradation when extrapolating beyond its training horizon. Below we show 30-second videos generated via sliding window extrapolation.
+      </p>
+    </div>
+  </div>
+  <br>
+  <div id="results-carousel"
+    style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
+    <div class="item" style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+      <video id="cereal" controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="static/videos/30s/0006.mp4"
+          type="video/mp4">
+      </video>
+    </div>
+    <div class="item" style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+      <video id="cereal" controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="static/videos/30s/0012.mp4"
+          type="video/mp4">
+      </video>
+    </div>
+    <div class="item" style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+      <video id="cereal" controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="static/videos/30s/0024.mp4"
+          type="video/mp4">
+      </video>
+    </div>
+    <div class="item" style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+      <video id="cereal" controls preload="metadata" autoplay muted loop playsinline>
+        <source
+          src="static/videos/30s/0016.mp4"
+          type="video/mp4">
+      </video>
+    </div>
+  </div>
+
+  <div class="columns is-centered has-text-centered">
+    <div class="column">
+      <p>This close-up shot of a Victoria crowned pigeon showcases its striking blue plumage and red chest...</p>
+    </div>
+    <div class="column">
+      <p>A cartoon kangaroo disco dances.</p>
+    </div>
+    <div class="column">
+      <p>A Chinese Lunar New Year celebration video with Chinese Dragon.</p>
+    </div>
+    <div class="column">
+      <p>3D animation of a small, round, fluffy creature with big, expressive eyes explores a vibrant, enchanted forest...</p>
+    </div>
+  </div>
+  </section>
+
+
+  <div class="container ">
+    <h2 id="obj-comparison" class="title is-3 has-text-centered">BibTeX</h2>
+  </div>
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <div style="position: relative;">
+        <pre><code id="bibtex-code">@article{huang2025selfforcing,
+  title={Self Forcing: Bridging the Train-Test Gap in Autoregressive Video Diffusion},
+  author={Huang, Xun and Li, Zhengqi and He, Guande and Zhou, Mingyuan and Shechtman, Eli},
+  journal={arXiv preprint arXiv:2506.08009},
+  year={2025}
+}</code></pre>
+        <button id="copy-bibtex" onclick="copyBibtex()" style="position: absolute; top: 10px; right: 10px; background: #3273dc; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">
+          Copy
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    function copyBibtex() {
+      const bibtexText = `@article{huang2025selfforcing,
+  title={Self Forcing: Bridging the Train-Test Gap in Autoregressive Video Diffusion},
+  author={Huang, Xun and Li, Zhengqi and He, Guande and Zhou, Mingyuan and Shechtman, Eli},
+  journal={arXiv preprint arXiv:2506.08009},
+  year={2025}
+}`;
+
+      navigator.clipboard.writeText(bibtexText).then(function() {
+        const button = document.getElementById('copy-bibtex');
+        const originalText = button.textContent;
+        button.textContent = 'Copied!';
+        button.style.background = '#48c774';
+        setTimeout(function() {
+          button.textContent = originalText;
+          button.style.background = '#3273dc';
+        }, 2000);
+      }).catch(function(err) {
+        console.error('Failed to copy text: ', err);
+      });
+    }
+  </script>
+
+  <footer class="footer">
+    <div class="container" align="center">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website template is borrowed from <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
 
 
 
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var videos = document.querySelectorAll('#results-carousel video');
 
+      videos.forEach(function (video) {
+        var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+        if (!isMobile) {
+          // console.log('Autoplay enabled for non-mobile devices');
+          if (!video.classList.contains('single_image_video')) {
+            video.setAttribute('autoplay', 'autoplay');
+            // video.play().catch(function(error) {
+            //     console.error('Video playback failed:', error);
+            // });
+          }
+
+          // else case is implicit - no action needed for 'single_image_video'
+        } else {
+          console.log('Autoplay disabled for mobile devices');
+        }
+      });
+    });
+  </script>
+
+</body>
+
+</html>
